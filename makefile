@@ -3,15 +3,16 @@
 #
 
 program := ilitek_ld
-objects := ILITek_Main.c		\
-	   ILITek_Device.c		\
-	   ILITek_Protocol_3X.c		\
-	   ILITek_Protocol_6X.c		\
-	   API/ILITek_Upgrade.c
+objects := ILITek_Main.c				\
+	   ILITek_Device.c				\
+	   API/CommonFlow/ilitek_def.c			\
+	   API/CommonFlow/ilitek_protocol.c		\
+	   API/CommonFlow/ilitek_update.c		\
+	   API/ILITek_Upgrade.c				\
 
 libraries := stdc++ rt pthread m
 
-include_path := ./include
+include_path := ./API ./API/CommonFlow
 source_path := ./src
 
 CXX ?= gcc
@@ -23,13 +24,6 @@ CXXFLAGS += -D__ENABLE_INBUF_DEBUG__
 CXXFLAGS += -D__ENABLE_LOG_FILE_DEBUG__
 CXXFLAGS += -static
 
-##
-##Selet using libusb: usb=y
-ifeq ($(usb), y)
-  CXXFLAGS += -DCONFIG_ILITEK_USE_LIBUSB
-  libraries += usb
-endif
-
 INC_FLAGS += $(addprefix -I, $(include_path))
 LIB_FLAGS += $(addprefix -l, $(libraries))
 VPATH = $(include_path)
@@ -40,12 +34,12 @@ vpath %.cpp $(source_path)
 .SUFFIXS: .c .cpp .h
 
 .PHONY: all
-all: $(objects)
-	$(CXX) $^ $(CXXFLAGS) $(LIB_FLAGS) -o $(program)
+all:
+	$(CXX) $^ $(objects) $(CXXFLAGS) $(LIB_FLAGS) $(INC_FLAGS) -o $(program)
 	@chmod 777 $(program)
 
 %.o: %.cpp
-	$(CXX) -c $< $(CXXFLAGS) $(LIB_FLAGS)
+	$(CXX) -c $(CXXFLAGS) $(LIB_FLAGS)
 
 .PHONY: clean
 clean:
