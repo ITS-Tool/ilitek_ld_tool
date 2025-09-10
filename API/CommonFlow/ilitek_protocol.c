@@ -724,7 +724,7 @@ int api_set_ctrl_mode(void *handle, uint8_t mode, bool eng, bool force)
         if (!force)
                 return 0;
 
-	dev->cb.delay_ms(100);
+	dev->cb.delay_ms(30);
 
 	return 0;
 }

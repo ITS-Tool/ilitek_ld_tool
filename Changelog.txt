@@ -1,0 +1,20 @@
+# Changelog
+# All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+## [1.0.11] - 2025-09-10
+### Added
+### Changed
+- Modify switch mode delay to 30ms
+### Removed
+
+## [1.0.10] - 2025-09-10
+### Added
+- FWID lookup by both EDID/Sensor-ID table.
+- Support ILITEK 2501x series ICs. 
+### Changed
+- Update ilitek_ld_tool core version to v4.0.0.1.
+- Modify ilitek_ld input argument format for all cmd.
+### Removed
+- Remove FWID cmd, combined into PanalInfor cmd.
