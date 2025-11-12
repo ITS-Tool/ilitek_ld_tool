@@ -41,7 +41,7 @@ bool has_vendor_define(uint8_t *src, unsigned int src_size,
 	return false;
 }
 
-int open_hidraw_device(uint32_t bus_type, unsigned long timeout_ms)
+int open_hidraw_device(unsigned long timeout_ms)
 {
 	struct hidraw_devinfo dev_info;
 	DIR *dir = NULL;
@@ -112,9 +112,13 @@ int open_hidraw_device(uint32_t bus_type, unsigned long timeout_ms)
 				goto err_continue;
 			}
 
-			if (dev_info.bustype != bus_type) {
-				TP_DBG(NULL, "invalid bus type: %u, should be %u\n",
-					dev_info.bustype, bus_type);
+			switch (dev_info.bustype) {
+			case BUS_PCI:
+			case BUS_I2C:
+				break;
+			default:
+				TP_DBG(NULL, "invalid bus type: %u\n",
+					dev_info.bustype);
 				goto err_continue;
 			}
 
@@ -149,7 +153,7 @@ err_continue:
 
 int InitDevice()
 {
-	return open_hidraw_device(BUS_I2C, 5000);
+	return open_hidraw_device(5000);
 }
 
 int hidraw_read(int fd, uint8_t *buf, int len, int timeout_ms,
